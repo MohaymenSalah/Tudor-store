@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>برنامج الخصومات - Tudor Optics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+            padding: 50px;
+            color: #333;
+            overflow: hidden;
+        }
+        .header {
+            font-size: 30px;
+            color: #9b111e;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-in;
+        }
+        .discount-container {
+            background-color: #9b111e;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            animation: bounceIn 1s ease-in-out;
+        }
+        .game-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            animation: fadeIn 1s ease-in;
+        }
+        .game-title {
+            font-size: 24px;
+            color: #9b111e;
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 2px solid #ccc;
+            margin-top: 10px;
+            width: 80%;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #9b111e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #d32f2f;
+        }
+        #timer {
+            font-size: 20px;
+            color: #9b111e;
+            margin-top: 20px;
+        }
+        .code-container {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #388e3c;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: translateY(-2000px); }
+            60% { transform: translateY(30px); }
+            80% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">مرحبًا في برنامج الخصومات - Tudor Optics!</div>
+    
+    <div class="discount-container">
+        <p>حل اللغز للحصول على خصم خاص على نظاراتك!</p>
+    </div>
+
+    <div class="game-container">
+        <div class="game-title" id="questionTitle">لغز الخصم:</div>
+        <p id="question">سيتم تحميل السؤال قريبًا...</p>
+        <input type="text" id="answer" placeholder="أدخل الإجابة هنا">
+        <button onclick="checkAnswer()">تحقق من الإجابة</button>
+    </div>
+
+    <div id="discountResult" style="margin-top: 20px;"></div>
+    <div id="timer">الوقت المتبقي: <span id="timeLeft">30</span> ثانية</div>
+
+    <script>
+        var timer;
+        var timeLeft = 30;
+        var correctSound = new Audio('https://www.soundjay.com/button/beep-07.wav');
+        var incorrectSound = new Audio('https://www.soundjay.com/button/beep-08.wav');
+        
+        var questions = [
+            { question: "ما هو مجموع الأرقام: 5 + 8 + 12 ؟", answer: 25 },
+            { question: "ما هو حاصل ضرب الأرقام: 6 × 7 ؟", answer: 42 },
+            { question: "ما هو ناتج قسمة 36 على 9 ؟", answer: 4 },
+            { question: "ما هو مجموع الأرقام: 15 + 25 ؟", answer: 40 },
+            { question: "ما هو ناتج طرح 100 من 250 ؟", answer: 150 }
+        ];
+
+        var currentQuestion = {};
+
+        // Start the timer
+        function startTimer() {
+            timer = setInterval(function() {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    document.getElementById("timeLeft").textContent = timeLeft;
+                } else {
+                    clearInterval(timer);
+                    document.getElementById("discountResult").innerHTML = "<h3>انتهى الوقت! حاول مرة أخرى.</h3>";
+                    document.getElementById("discountResult").style.color = "#d32f2f";
+                }
+            }, 1000);
+        }
+
+        // Start the game timer when the page loads
+        window.onload = function() {
+            startTimer();
+            loadRandomQuestion();
+        };
+
+        function loadRandomQuestion() {
+            // Randomly select a question
+            var randomIndex = Math.floor(Math.random() * questions.length);
+            currentQuestion = questions[randomIndex];
+            document.getElementById("question").textContent = currentQuestion.question;
+        }
+
+        function generateDiscountCode() {
+            var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            var
